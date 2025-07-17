@@ -19,7 +19,7 @@ int main() {
     Enemy enemy(20.0f, screenHeight/3, 50, 50, 2, RED);
 
     // Block initialization
-    Blocks block(700, 380, 50, 50, GREEN);
+    Blocks block(700, 360, 50, 50, GREEN);
 
     while (!WindowShouldClose()) {
         // Game logic update here
@@ -53,39 +53,50 @@ int main() {
         
         // Blocks collition system
         if (CheckCollisionRecs(playerRect, blockRect)) {
-            // Calculate overlap distances for each direction
-            float overlapLeft = (playerRect.x + playerRect.width) - blockRect.x;
-            float overlapRight = (blockRect.x + blockRect.width) - playerRect.x;
-            float overlapTop = (playerRect.y + playerRect.height) - blockRect.y;
-            float overlapBottom = (blockRect.y + blockRect.height) - playerRect.y;
-            
-            // Find the smallest overlap to determine collision direction
-            bool fromLeft = (overlapLeft < overlapRight) && (overlapLeft < overlapTop) && (overlapLeft < overlapBottom);
-            bool fromRight = (overlapRight < overlapLeft) && (overlapRight < overlapTop) && (overlapRight < overlapBottom);
-            bool fromTop = (overlapTop < overlapLeft) && (overlapTop < overlapRight) && (overlapTop < overlapBottom);
-            bool fromBottom = (overlapBottom < overlapLeft) && (overlapBottom < overlapRight) && (overlapBottom < overlapTop);
-            
-            // Handle collision based on direction with small buffer for precision
-            const float COLLISION_BUFFER = 0.1f; // Small buffer to prevent visual penetration
-            
-            if (fromTop && player.isFalling()) {
-                // Player lands on top of block
-                player.SetPosition(playerRect.x, blockRect.y - playerRect.height - COLLISION_BUFFER);
-                player.SetVelocityY(0);
-                player.SetJumping(false);
+            // Calculate overlap distances for all 4 directions
+            float overlaps[4] = {
+                (playerRect.x + playerRect.width) - blockRect.x,    // ← Left penetration
+                (blockRect.x + blockRect.width) - playerRect.x,    // → Right penetration
+                (playerRect.y + playerRect.height) - blockRect.y,  // ↑ Top penetration
+                (blockRect.y + blockRect.height) - playerRect.y    // ↓ Bottom penetration
+            };
+
+            /* 
+            Find which side has the smallest overlap.
+            Why? The smallest overlap indicates:
+            - The direction where collision is most "shallow" (least penetration)
+            - The most natural correction direction (avoids over-correction)
+            - The actual side where contact is happening
+            */
+            int minIndex = 0; // Start with left side (index 0)
+            for (int i = 1; i < 4; i++) {
+                if (overlaps[i] < overlaps[minIndex]) minIndex = i; // New smallest overlap found
             }
-            else if (fromBottom) {
-                // Player hits block from below
-                player.SetPosition(playerRect.x, blockRect.y + blockRect.height + COLLISION_BUFFER);
-                player.SetVelocityY(0);
-            }
-            else if (fromLeft) {
-                // Player hits block from the left
-                player.SetPosition(blockRect.x - playerRect.width - COLLISION_BUFFER, playerRect.y);
-            }
-            else if (fromRight) {
-                // Player hits block from the right
-                player.SetPosition(blockRect.x + blockRect.width + COLLISION_BUFFER, playerRect.y);
+
+            const float BUFFER = 0.1f; // Small gap to prevent visual clipping
+
+            // Resolve collision based on direction
+            switch (minIndex) {
+                case 0: // ← Left collision
+                    player.SetPosition(blockRect.x - playerRect.width - BUFFER, playerRect.y);
+                    break;
+                    
+                case 1: // → Right collision
+                    player.SetPosition(blockRect.x + blockRect.width + BUFFER, playerRect.y);
+                    break;
+                    
+                case 2: // ↑ Top collision (player landing)
+                    if (player.isFalling()) {
+                        player.SetPosition(playerRect.x, blockRect.y - playerRect.height - BUFFER);
+                        player.SetVelocityY(0);
+                        player.SetJumping(false);
+                    }
+                    break;
+                    
+                case 3: // ↓ Bottom collision (player head bump)
+                    player.SetPosition(playerRect.x, blockRect.y + blockRect.height + BUFFER);
+                    player.SetVelocityY(0);
+                    break;
             }
         }
         // ------------------------------------------------------------
