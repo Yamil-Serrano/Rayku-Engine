@@ -83,3 +83,16 @@ void Player::Draw() {
 Rectangle Player::GetRect() {
     return rect;
 }
+
+void Player::SetPosition(float x, float y) {
+    rect.x = x;
+    rect.y = y;
+}
+
+void Player::SetVelocityY(float velocity) {
+    velocity_Y = velocity;
+}
+
+void Player::SetJumping(bool jumping) {
+    isJumping = jumping;
+}

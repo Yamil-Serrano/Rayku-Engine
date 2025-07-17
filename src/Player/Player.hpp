@@ -29,6 +29,10 @@ class Player {
         void Jump();
         void knockback(Rectangle enemyPosition);
         bool isFalling();
+
+        void SetPosition(float x, float y);
+        void SetVelocityY(float velocity);
+        void SetJumping(bool jumping);
         
 };
 
