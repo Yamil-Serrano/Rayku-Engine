@@ -19,6 +19,7 @@ class Player {
         float gravity;
         float jumpForce;
         bool isJumping;
+        bool isTouchingWallHorizontally;
 
     public:
         Player(float pos_x, float pos_y, float width, float height, float speed, Color color);
@@ -33,6 +34,7 @@ class Player {
         void SetPosition(float x, float y);
         void SetVelocityY(float velocity);
         void SetJumping(bool jumping);
+        void SetTouchingWallHorizontally(bool touching);
         
 };
 

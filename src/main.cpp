@@ -1,7 +1,13 @@
-# include "raylib.h"
+#include "raylib.h"
+
 #include "src/Player/Player.hpp"
 #include "src/Enemy/Enemy.hpp"
 #include "src/Blocks/Blocks.hpp"
+
+#include <cmath> 
+#include <vector>
+
+using namespace std;
 
 int main() {
     // Initialization
@@ -19,18 +25,26 @@ int main() {
     Enemy enemy(20.0f, screenHeight/3, 50, 50, 2, RED);
 
     // Block initialization
-    Blocks block(700, 360, 50, 50, GREEN);
+    vector<Blocks> blocks = {
+        Blocks(700, 360, 50, 50, GREEN),
+        Blocks(700, 310, 50, 50, GREEN), 
+        Blocks(700, 260, 50, 50, GREEN),
+        Blocks(700, 210, 50, 50, GREEN), 
 
+        Blocks(650, 360, 50, 50, GREEN),
+        Blocks(600, 360, 50, 50, GREEN),
+        Blocks(550, 360, 50, 50, GREEN)
+    };
+    
     while (!WindowShouldClose()) {
         // Game logic update here
         player.Update();
-        player.Draw();
-        
+        enemy.Update();
+
 
         // -------------------- Collition system --------------------
         Rectangle playerRect = player.GetRect();
         Rectangle enemyRect = enemy.GetRect();
-        Rectangle blockRect = block.GetRect();
 
         // When using a vector of enemies, use a for loop here.
         // Enemy collition system
@@ -50,67 +64,73 @@ int main() {
                 }
             }
         }
-        
+
         // Blocks collition system
-        if (CheckCollisionRecs(playerRect, blockRect)) {
-            // Calculate overlap distances for all 4 directions
-            float overlaps[4] = {
-                (playerRect.x + playerRect.width) - blockRect.x,    // ← Left penetration
-                (blockRect.x + blockRect.width) - playerRect.x,    // → Right penetration
-                (playerRect.y + playerRect.height) - blockRect.y,  // ↑ Top penetration
-                (blockRect.y + blockRect.height) - playerRect.y    // ↓ Bottom penetration
-            };
+        // Reset wall state for this frame
+        player.SetTouchingWallHorizontally(false);
 
-            /* 
-            Find which side has the smallest overlap.
-            Why? The smallest overlap indicates:
-            - The direction where collision is most "shallow" (least penetration)
-            - The most natural correction direction (avoids over-correction)
-            - The actual side where contact is happening
-            */
-            int minIndex = 0; // Start with left side (index 0)
-            for (int i = 1; i < 4; i++) {
-                if (overlaps[i] < overlaps[minIndex]) minIndex = i; // New smallest overlap found
-            }
+        for (Blocks block : blocks) {
+            Rectangle blockRect = block.GetRect();
+            Rectangle playerRect = player.GetRect();
+            
+            if (CheckCollisionRecs(playerRect, blockRect)) {
+                // Find the center points to determine collision direction
+                // Player center point
+                float playerCenterX = playerRect.x + playerRect.width / 2;
+                float playerCenterY = playerRect.y + playerRect.height / 2;
 
-            const float BUFFER = 0.1f; // Small gap to prevent visual clipping
-
-            // Resolve collision based on direction
-            switch (minIndex) {
-                case 0: // ← Left collision
-                    player.SetPosition(blockRect.x - playerRect.width - BUFFER, playerRect.y);
-                    break;
-                    
-                case 1: // → Right collision
-                    player.SetPosition(blockRect.x + blockRect.width + BUFFER, playerRect.y);
-                    break;
-                    
-                case 2: // ↑ Top collision (player landing)
-                    if (player.isFalling()) {
-                        player.SetPosition(playerRect.x, blockRect.y - playerRect.height - BUFFER);
-                        player.SetVelocityY(0);
-                        player.SetJumping(false);
+                // Block center point
+                float blockCenterX = blockRect.x + blockRect.width / 2;
+                float blockCenterY = blockRect.y + blockRect.height / 2;
+                
+                // Calculate distance between centers
+                float deltaX = playerCenterX - blockCenterX;
+                float deltaY = playerCenterY - blockCenterY;
+                
+                // The bigger difference tells us which side we hit
+                if (abs(deltaX) > abs(deltaY)) {
+                    // Horizontal collision - we hit the left or right side
+                    if (deltaX > 0) {
+                        // Player is to the right, push them further right
+                        player.SetPosition(blockRect.x + blockRect.width, playerRect.y);
+                    } else {
+                        // Player is to the left, push them further left
+                        player.SetPosition(blockRect.x - playerRect.width, playerRect.y);
                     }
-                    break;
-                    
-                case 3: // ↓ Bottom collision (player head bump)
-                    player.SetPosition(playerRect.x, blockRect.y + blockRect.height + BUFFER);
-                    player.SetVelocityY(0);
-                    break;
+                    player.SetTouchingWallHorizontally(true);
+                } else {
+                    // Vertical collision - we hit the top or bottom
+                    if (deltaY > 0) {
+                        // Player is below block - bonk! (head bump)
+                        player.SetPosition(playerRect.x, blockRect.y + blockRect.height);
+                        player.SetVelocityY(0);
+                    } else {
+                        // Player is above block - landing platform
+                        // Only snap to platform if we're actually falling down
+                        if (player.isFalling()) {
+                            player.SetPosition(playerRect.x, blockRect.y - playerRect.height);
+                            player.SetVelocityY(0);
+                            player.SetJumping(false);
+                        }
+                    }
+                }
             }
         }
         // ------------------------------------------------------------
 
-        enemy.Update();
-        enemy.Draw();
-
-        block.Draw();
-        
-        // Draw here
+        // Render everything
         BeginDrawing();
             ClearBackground(RAYWHITE);
-        
-            EndDrawing();
+            
+            // Draw all our game objects
+            player.Draw();
+            enemy.Draw();
+            
+            for (Blocks block : blocks) {
+                block.Draw();
+            }
+            
+        EndDrawing();
     }
 
     // Free resources

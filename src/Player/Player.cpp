@@ -12,6 +12,7 @@ Player :: Player(float pos_x, float pos_y, float width, float height, float spee
     velocity_X = 0;
     gravity = 0.5;
     jumpForce = -10.0f; 
+    isTouchingWallHorizontally = false;
 }
 
 void Player :: Update() {
@@ -29,8 +30,9 @@ void Player :: Update() {
 
     // Allow movement if not knockback
     if (!isKnockback) {
-        if (IsKeyDown(KEY_RIGHT)) rect.x += speed;
-        if (IsKeyDown(KEY_LEFT)) rect.x -= speed;
+        // Note if I delete the boolean "isTouchingWall" i will be able to climb the walls
+        if (IsKeyDown(KEY_RIGHT) && !isTouchingWallHorizontally) rect.x += speed;
+        if (IsKeyDown(KEY_LEFT)  && !isTouchingWallHorizontally) rect.x -= speed;
     }
 
     // Aplaying gravity
@@ -45,10 +47,10 @@ void Player :: Update() {
         isJumping = false;
     }
 
-    // Allow jump if not knockback
+    // Allow jump if not knockback and not against a wall
     if (IsKeyPressed(KEY_SPACE) && !isKnockback && !isJumping) {
-        Jump();
-    }
+    Jump();
+}
 
 }
 
@@ -95,4 +97,8 @@ void Player::SetVelocityY(float velocity) {
 
 void Player::SetJumping(bool jumping) {
     isJumping = jumping;
+}
+
+void Player::SetTouchingWallHorizontally(bool touching) {
+    isTouchingWallHorizontally = touching;
 }
