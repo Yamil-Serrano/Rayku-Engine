@@ -1,7 +1,7 @@
 
 # Rayku Engine
 
-**Rayku Engine** is a basic 2D platform game engine built in C++ using [raylib](https://www.raylib.com/) as the underlying framework. It provides a simple and modular codebase designed for creating 2D platformer games, focusing on core engine functionality such as input handling, rendering, physics, and entity management. The name **Rayku** combines "Ray" from [raylib](https://www.raylib.com/) with "ku", inspired by the Korean word **구축** (*guchuk*), which means "to build" or "to construct". Rayku Engine represents a lightweight and modular engine built with raylib, designed for developers to build and create their own 2D games. The engine is intended as a foundation for further projects, emphasizing code-first development without a graphical user interface or editor.
+**Rayku Engine** is a basic 2D platform mini game engine built in C++ using [raylib](https://www.raylib.com/) as the underlying framework. It provides a simple and modular codebase designed for creating 2D platformer games, focusing on core engine functionality such as input handling, rendering, physics, and entity management. The name **Rayku** combines "Ray" from [raylib](https://www.raylib.com/) with "ku", inspired by the Korean word **구축** (*guchuk*), which means "to build" or "to construct". Rayku Engine represents a lightweight and modular engine built with raylib, designed for developers to build and create their own 2D games. The engine is intended as a foundation for further projects, emphasizing code-first development without a graphical user interface or editor.
 
 
 ## Planned Features – Rayku Engine (Full Version)
