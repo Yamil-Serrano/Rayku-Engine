@@ -88,7 +88,12 @@ int main() {
                 float deltaY = playerCenterY - blockCenterY;
                 
                 // The bigger difference tells us which side we hit
-                if (abs(deltaX) > abs(deltaY)) {
+                float horizontalBias = 1.1f; 
+                // With this bias we priorize the horizontal collition. 
+                // Because sometimes the comparation bellow can be equal (5 = 5) 
+                // so it will be detected as vertical collition instead horizontal. 
+                
+                if ( (abs(deltaX) * horizontalBias) > abs(deltaY)) {
                     // Horizontal collision - we hit the left or right side
                     if (deltaX > 0) {
                         // Player is to the right, push them further right
