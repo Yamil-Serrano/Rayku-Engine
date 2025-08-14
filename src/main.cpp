@@ -20,22 +20,40 @@ int main() {
     SetTargetFPS(60);
 
     // Player initialization
-    Player player(screenWidth/2, screenHeight/2, 50, 50, 5, BLUE);
+    Player player(600.0f, screenHeight/2, 50, 50, 5, BLUE);
 
     vector<Enemy> enemies = {
-        Enemy(20.0f, screenHeight/3, 50, 50, 2, RED)
+        Enemy(150.0f, screenHeight/2, 50, 50, 2, RED)
     };
 
     // Block initialization
     vector<Blocks> blocks = {
+        // Right wall
         Blocks(700, 360, 50, 50, GREEN),
         Blocks(700, 310, 50, 50, GREEN), 
         Blocks(700, 260, 50, 50, GREEN),
         Blocks(700, 210, 50, 50, GREEN), 
 
+        // Floor
         Blocks(650, 360, 50, 50, GREEN),
         Blocks(600, 360, 50, 50, GREEN),
-        Blocks(550, 360, 50, 50, GREEN)
+        Blocks(550, 360, 50, 50, GREEN),
+        Blocks(500, 360, 50, 50, GREEN),
+        Blocks(450, 360, 50, 50, GREEN),
+        Blocks(400, 360, 50, 50, GREEN),
+        Blocks(350, 360, 50, 50, GREEN),
+        Blocks(300, 360, 50, 50, GREEN),
+        Blocks(250, 360, 50, 50, GREEN),
+        Blocks(200, 360, 50, 50, GREEN),
+        Blocks(150, 360, 50, 50, GREEN),
+        Blocks(100, 360, 50, 50, GREEN),
+        Blocks(50, 360, 50, 50, GREEN),
+
+        // Left wall
+        Blocks(50, 360, 50, 50, GREEN),
+        Blocks(50, 310, 50, 50, GREEN), 
+        Blocks(50, 260, 50, 50, GREEN),
+        Blocks(50, 210, 50, 50, GREEN), 
     };
 
     // Collition System  initialization
@@ -51,7 +69,8 @@ int main() {
 
 
         // -------------------- Collition system --------------------
-        collisionSystem.CheckCollisions();
+        collisionSystem.CheckPlayerCollitions();
+        collisionSystem.CheckEnemyCollitions();
         // ------------------------------------------------------------
 
         // Render everything
@@ -77,3 +96,4 @@ int main() {
     return 0;
     
 }
+

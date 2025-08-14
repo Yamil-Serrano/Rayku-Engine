@@ -1,26 +1,26 @@
 #include "Enemy.hpp"
 
-Enemy :: Enemy(float pos_x, float pos_y, float width, float height, float speed, Color color) {
+Enemy::Enemy(float pos_x, float pos_y, float width, float height, float speed, Color color) {
     rect = {pos_x, pos_y, width, height};
     this->speed = speed;
     this->color = color;
 
     direction = 1;
-    startEntityTime = GetTime(); // Initial time of the entity
+    startEntityTime = GetTime();
     isAlive = true;
 
-    // Initializing Gravity and jump variables
     velocity_Y = 0;
     gravity = 0.5;
-    jumpForce = -10.0f; 
+    isJumping = false;
+    isTouchingWallHorizontally = false;
 }
 
-void Enemy :: Update() {
+void Enemy::Update() {
     if (!isAlive) return; // Ded
 
     // -------------------- Simple left and right movement --------------------
     double currentGameTime = GetTime();
-    if (currentGameTime - startEntityTime >= 2.0) {
+    if (currentGameTime - startEntityTime >= 5.0 || isTouchingWallHorizontally) {
         direction *= -1; // Change direction
         startEntityTime = GetTime(); // Reset the initial timer
     }
@@ -32,19 +32,15 @@ void Enemy :: Update() {
      // Aplaying gravity
     velocity_Y += gravity;
     rect.y += velocity_Y;
-    
-
-    // Floor detection
-    if (rect.y >= 400) {
-        rect.y = 400;
-        velocity_Y = 0;
-        isJumping = false;
-    }
 }
 
 void Enemy::Jump() {
-    velocity_Y = jumpForce;
+    velocity_Y = -10.0f; // Fixed jump force without variable
     isJumping = true;
+}
+
+bool Enemy::isFalling() {
+    return velocity_Y > 0;
 }
 
 void Enemy::TakeDamage() {
@@ -56,10 +52,27 @@ bool Enemy::IsAlive() {
 }
 
 void Enemy::Draw() {
-    if (!isAlive) return; // Ded
+    if (!isAlive) return;
     DrawRectangleRec(rect, color);
 }
 
 Rectangle Enemy::GetRect() {
     return rect;
+}
+
+void Enemy::SetPosition(float x, float y) {
+    rect.x = x;
+    rect.y = y;
+}
+
+void Enemy::SetVelocityY(float velocity) {
+    velocity_Y = velocity;
+}
+
+void Enemy::SetJumping(bool jumping) {
+    isJumping = jumping;
+}
+
+void Enemy::SetTouchingWallHorizontally(bool touching) {
+    isTouchingWallHorizontally = touching;
 }

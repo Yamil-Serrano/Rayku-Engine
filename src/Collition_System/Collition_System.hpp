@@ -16,5 +16,6 @@ class Collition_System {
         
     public:
         Collition_System(Player& player, std::vector<Enemy>& enemies, std::vector<Blocks>& blocks);
-        void CheckCollisions();
+        void CheckPlayerCollitions();
+        void CheckEnemyCollitions();
 };

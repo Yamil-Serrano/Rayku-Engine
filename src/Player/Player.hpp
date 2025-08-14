@@ -3,7 +3,7 @@
 
 class Player {
     private:
-        Rectangle rect; // This is our only source of position of our player
+        Rectangle rect;
         float speed;
         Color color;
 
@@ -25,6 +25,7 @@ class Player {
         Player(float pos_x, float pos_y, float width, float height, float speed, Color color);
         void Update();
         void Draw();
+        
         Rectangle GetRect();
 
         void Jump();
@@ -35,7 +36,4 @@ class Player {
         void SetVelocityY(float velocity);
         void SetJumping(bool jumping);
         void SetTouchingWallHorizontally(bool touching);
-        
 };
-
-
