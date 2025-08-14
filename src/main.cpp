@@ -15,7 +15,11 @@ int main() {
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib prototype");
+    InitWindow(screenWidth, screenHeight, "Rayku Engine");
+
+    Image icon = LoadImage("src/assets/settings.png");
+    SetWindowIcon(icon);
+    UnloadImage(icon);
 
     SetTargetFPS(60);
 
