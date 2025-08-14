@@ -19,6 +19,21 @@
 
 ---
 
+## Preview – Current State of Rayku Engine
+
+Below is a screenshot of the current minimal implementation of Rayku Engine:
+
+- Blue block → Player
+- Red block → Enemy
+- Green blocks → Platform tiles
+
+<img width="937" height="591" alt="image" src="https://github.com/user-attachments/assets/5df65016-a305-4415-aa9f-9ace7e682f23" />
+
+
+---
+> At this stage, the engine features a simple player, one enemy, and static platforms as part of its initial testing setup.
+---
+
 ## Getting Started
 
 ### Installation
@@ -48,3 +63,34 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) fi
 For questions or suggestions, feel free to reach out:
 
 GitHub: [Neowizen](https://github.com/Yamil-Serrano)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
