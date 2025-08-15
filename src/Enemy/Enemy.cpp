@@ -20,7 +20,7 @@ void Enemy::Update() {
 
     // -------------------- Simple left and right movement --------------------
     double currentGameTime = GetTime();
-    if (currentGameTime - startEntityTime >= 5.0 || isTouchingWallHorizontally) {
+    if (currentGameTime - startEntityTime >= 1.5 || isTouchingWallHorizontally) {
         direction *= -1; // Change direction
         startEntityTime = GetTime(); // Reset the initial timer
     }
