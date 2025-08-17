@@ -52,7 +52,10 @@ int main() {
     while (!WindowShouldClose()) {
         // Game logic update here
         // Camera target follows player
-        camera.target = (Vector2){ player.GetPosition().x + 20, player.GetPosition().y + 20 };
+        Vector2 targetPos = { player.GetPosition().x + 20, player.GetPosition().y + 20 };
+        float smoothFactor = 0.15f;
+        camera.target.x += (targetPos.x - camera.target.x) * smoothFactor;
+        camera.target.y += (targetPos.y - camera.target.y) * smoothFactor;
 
         // Player update
         player.Update();
