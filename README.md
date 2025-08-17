@@ -26,6 +26,7 @@ Below is a screenshot of the current minimal implementation of Rayku Engine:
 - Blue block → Player
 - Red block → Enemy
 - Green blocks → Platform tiles
+- Yellow Blocks → Collectibles
 
 <img width="937" height="591" alt="image" src="https://github.com/user-attachments/assets/5df65016-a305-4415-aa9f-9ace7e682f23" />
 
