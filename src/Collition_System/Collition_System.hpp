@@ -3,6 +3,7 @@
 #include "src/Player/Player.hpp"
 #include "src/Enemy/Enemy.hpp"
 #include "src/Blocks/Blocks.hpp"
+#include "src/Collectibles/Collectibles.hpp"
 #include <vector>
 #include <cmath> 
 
@@ -13,9 +14,10 @@ class Collition_System {
         Player& player;
         vector <Enemy>& enemies;
         vector <Blocks>& blocks;
+        vector <Collectibles>& collectibles;
         
     public:
-        Collition_System(Player& player, std::vector<Enemy>& enemies, std::vector<Blocks>& blocks);
+        Collition_System(Player& player, std::vector<Enemy>& enemies, vector<Blocks>& blocks, vector<Collectibles>& collectibles);
         void CheckPlayerCollitions();
         void CheckEnemyCollitions();
 };

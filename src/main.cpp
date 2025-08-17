@@ -3,6 +3,7 @@
 #include "src/Player/Player.hpp"
 #include "src/Enemy/Enemy.hpp"
 #include "src/Blocks/Blocks.hpp"
+#include "src/Collectibles/Collectibles.hpp"
 #include "src/Collition_System/Collition_System.hpp"
 #include "src/Map_Loader/Map_loader.hpp"
 
@@ -39,8 +40,11 @@ int main() {
     // Blocks initialization
     vector <Blocks> blocks = Maploader.GetMapBlocks();
 
+    // Collectibles initialization
+    vector <Collectibles>& collectibles = Maploader.GetMapCollectibles();
+
     // Collition System initialization
-    Collition_System collisionSystem(player, enemies, blocks);
+    Collition_System collisionSystem(player, enemies, blocks, collectibles);
 
     // Camera initialization
     Camera2D camera = { 0 };

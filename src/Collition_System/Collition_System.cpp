@@ -1,9 +1,10 @@
 #include "Collition_System.hpp"
 
-Collition_System::Collition_System(Player& player, vector<Enemy>& enemies, vector<Blocks>& blocks): 
+Collition_System::Collition_System(Player& player, vector<Enemy>& enemies, vector<Blocks>& blocks, vector<Collectibles>& collectibles) : 
     player(player), 
     enemies(enemies), 
-    blocks(blocks) {}
+    blocks(blocks),
+    collectibles(collectibles) {}
 
 void Collition_System::CheckPlayerCollitions() {
         Rectangle playerRect = player.GetRect();
@@ -87,7 +88,17 @@ void Collition_System::CheckPlayerCollitions() {
                 }
             }
         }
-}
+
+        // Collectibles collition system
+        for (Collectibles& collectible : collectibles) {
+            Rectangle collectibleRect = collectible.GetRect();
+            Rectangle playerRect = player.GetRect();
+
+            if (CheckCollisionRecs(playerRect, collectibleRect) && !collectible.IsCollected()) {
+                collectible.Collect();
+            }
+        }
+    }
 
 void Collition_System::CheckEnemyCollitions() {
 

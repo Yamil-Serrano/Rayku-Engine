@@ -20,9 +20,15 @@ void Map_loader::LoadCSVMap(const string& filename) {
 
         while (getline(ss, value, ',')) {
             if (value == "1") {
-                MapBlocks.push_back(Blocks(pos_x * blockSize, pos_y * blockSize, blockSize, blockSize, GREEN));
+                MapBlocks.push_back(Blocks(pos_x * mapGridSize, pos_y * mapGridSize, blockSize, blockSize, GREEN));
                 pos_x++;
             }
+
+            else if (value == "2") {
+                MapCollectibles.push_back(Collectibles(pos_x * mapGridSize, pos_y * mapGridSize, collectiblesSize, collectiblesSize, YELLOW));
+                pos_x++;
+            }
+
             else if (value == "0") {
                 pos_x++;
             }
@@ -37,8 +43,16 @@ void Map_loader::Draw_Map() {
     for (Blocks& block : MapBlocks) {
         block.Draw();
     }
+
+    for (Collectibles& collectible : MapCollectibles) {
+        collectible.Draw();
+    }
 }
 
-vector<Blocks> Map_loader::GetMapBlocks() {
+vector<Blocks>& Map_loader::GetMapBlocks() {
     return MapBlocks;
+}
+
+vector<Collectibles>& Map_loader::GetMapCollectibles() {
+    return MapCollectibles;
 }
