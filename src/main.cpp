@@ -41,11 +41,23 @@ int main() {
 
     // Collition System initialization
     Collition_System collisionSystem(player, enemies, blocks);
+
+    // Camera initialization
+    Camera2D camera = { 0 };
+    camera.target = (Vector2){ player.GetPosition().x + 20.0f, player.GetPosition().y + 20.0f };
+    camera.offset = (Vector2){ screenWidth/2.0f, screenHeight/2.0f };
+    camera.rotation = 0.0f;
+    camera.zoom = 1.0f;
     
     while (!WindowShouldClose()) {
         // Game logic update here
+        // Camera target follows player
+        camera.target = (Vector2){ player.GetPosition().x + 20, player.GetPosition().y + 20 };
+
+        // Player update
         player.Update();
 
+        // Enemies update
         for(Enemy& enemy : enemies) {
             enemy.Update();
         }
@@ -59,6 +71,9 @@ int main() {
         // Render everything
         BeginDrawing();
             ClearBackground(RAYWHITE);
+
+            // Begin Camera
+            BeginMode2D(camera);
             
             // Draw all our game objects
             player.Draw();

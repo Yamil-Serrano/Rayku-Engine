@@ -56,6 +56,11 @@ bool Player::isFalling() {
     return velocity_Y > 0;
 }
 
+Vector2 Player::GetPosition()
+{
+    return {rect.x, rect.y};
+}
+
 void Player::Draw() {
     DrawRectangleRec(rect, color);
 }

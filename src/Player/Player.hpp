@@ -3,7 +3,7 @@
 
 class Player {
     private:
-        Rectangle rect;
+        Rectangle rect; // Entity position
         float speed;
         Color color;
 
@@ -31,6 +31,8 @@ class Player {
         void Jump();
         void knockback(Rectangle enemyPosition);
         bool isFalling();
+
+        Vector2 GetPosition();
 
         void SetPosition(float x, float y);
         void SetVelocityY(float velocity);
