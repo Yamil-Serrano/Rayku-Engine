@@ -5,6 +5,7 @@
 #include "src/Blocks/Blocks.hpp"
 #include "src/Collectibles/Collectibles.hpp"
 #include "src/Collition_System/Collition_System.hpp"
+#include "src/Audio_Manager/Audio_Manager.hpp"
 #include "src/Map_Loader/Map_loader.hpp"
 
 #include <cmath> 
@@ -19,18 +20,24 @@ int main() {
 
     InitWindow(screenWidth, screenHeight, "Rayku Engine");
 
+    // Audio device initialization
+    InitAudioDevice();
+
     Image icon = LoadImage("src/assets/settings.png");
     SetWindowIcon(icon);
     UnloadImage(icon);
 
     SetTargetFPS(60);
 
+    // Audio manager initialization
+    AudioManager audio;
+
     // Map Loader
     Map_loader Maploader;
     Maploader.LoadCSVMap("src/Maps/map0.csv");
 
     // Player initialization
-    Player player(600.0f, screenHeight/2, 50, 50, 5, BLUE);
+    Player player(600.0f, screenHeight/2, 50, 50, 5, BLUE, audio);
 
     // Enemies initialization
     vector<Enemy> enemies = {
@@ -44,7 +51,7 @@ int main() {
     vector <Collectibles>& collectibles = Maploader.GetMapCollectibles();
 
     // Collition System initialization
-    Collition_System collisionSystem(player, enemies, blocks, collectibles);
+    Collition_System collisionSystem(player, enemies, blocks, collectibles, audio);
 
     // Camera initialization
     Camera2D camera = { 0 };
@@ -94,6 +101,7 @@ int main() {
     }
 
     // Free resources
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;

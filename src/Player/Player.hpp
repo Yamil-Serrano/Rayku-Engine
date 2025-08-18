@@ -1,8 +1,11 @@
 #pragma once
 #include "raylib.h"
+#include "src/Audio_Manager/Audio_Manager.hpp"
 
 class Player {
     private:
+        AudioManager& audio; 
+
         Rectangle rect; // Entity position
         float speed;
         Color color;
@@ -22,7 +25,7 @@ class Player {
         bool isTouchingWallHorizontally;
 
     public:
-        Player(float pos_x, float pos_y, float width, float height, float speed, Color color);
+        Player(float pos_x, float pos_y, float width, float height, float speed, Color color, AudioManager& audioManager);
         void Update();
         void Draw();
         

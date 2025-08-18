@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-Player::Player(float pos_x, float pos_y, float width, float height, float speed, Color color) {
+Player::Player(float pos_x, float pos_y, float width, float height, float speed, Color color, AudioManager& audioManager) : audio(audioManager) {
     rect = {pos_x, pos_y, width, height};
     this->speed = speed;
     this->color = color;
@@ -42,6 +42,8 @@ void Player::Update() {
 void Player::Jump() {
     velocity_Y = jumpForce;
     isJumping = true;
+
+    audio.PlayJumpSound();
 }
 
 void Player::knockback(Rectangle enemyPosition) {

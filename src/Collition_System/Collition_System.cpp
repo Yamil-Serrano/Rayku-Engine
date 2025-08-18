@@ -1,10 +1,11 @@
 #include "Collition_System.hpp"
 
-Collition_System::Collition_System(Player& player, vector<Enemy>& enemies, vector<Blocks>& blocks, vector<Collectibles>& collectibles) : 
+Collition_System::Collition_System(Player& player, vector<Enemy>& enemies, vector<Blocks>& blocks, vector<Collectibles>& collectibles, AudioManager& audioManager) : 
     player(player), 
     enemies(enemies), 
     blocks(blocks),
-    collectibles(collectibles) {}
+    collectibles(collectibles),
+    audio(audioManager) {}
 
 void Collition_System::CheckPlayerCollitions() {
         Rectangle playerRect = player.GetRect();
@@ -96,6 +97,7 @@ void Collition_System::CheckPlayerCollitions() {
 
             if (CheckCollisionRecs(playerRect, collectibleRect) && !collectible.IsCollected()) {
                 collectible.Collect();
+                audio.PlayCollectableSound();
             }
         }
     }
